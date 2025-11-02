@@ -21,6 +21,7 @@ export function OrderByMenu() {
         <Button
           variant="ghost"
           className="hover:bg-transparent min-w-40 justify-start font-bold h-auto"
+          withoutAnimation
         >
           <span className="text-base">
             {order === "asc" ? "Ascending" : "Descending"}

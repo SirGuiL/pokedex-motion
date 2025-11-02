@@ -44,10 +44,12 @@ function Button({
   variant,
   size,
   asChild = false,
+  withoutAnimation = false,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    withoutAnimation?: boolean;
   }) {
   if (asChild)
     return (
@@ -57,6 +59,16 @@ function Button({
         {...props}
       />
     );
+
+  if (withoutAnimation) {
+    return (
+      <button
+        data-slot="button"
+        className={cn(buttonVariants({ variant, size, className }))}
+        {...props}
+      />
+    );
+  }
 
   return (
     <motion.button

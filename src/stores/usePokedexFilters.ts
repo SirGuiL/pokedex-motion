@@ -4,11 +4,11 @@ interface FilterStore {
   order: "asc" | "desc";
   setOrder: (value: "asc" | "desc") => void;
 
-  from: number;
-  setFrom: (value: number) => void;
+  from: number | null;
+  setFrom: (value: number | null) => void;
 
-  to: number;
-  setTo: (value: number) => void;
+  to: number | null;
+  setTo: (value: number | null) => void;
 
   type: string;
   setType: (value: string) => void;
@@ -32,10 +32,10 @@ export const useFilterStore = create<FilterStore>((set) => ({
   order: "asc",
   setOrder: (value) => set({ order: value }),
 
-  from: 0,
+  from: null,
   setFrom: (value) => set({ from: value }),
 
-  to: 0,
+  to: null,
   setTo: (value) => set({ to: value }),
 
   type: "",
@@ -56,8 +56,8 @@ export const useFilterStore = create<FilterStore>((set) => ({
   clearFilters: () =>
     set({
       order: "asc",
-      from: 0,
-      to: 0,
+      from: null,
+      to: null,
       type: "",
       weakness: "",
       ability: "",

@@ -2,9 +2,14 @@ import { useSelectedPokemonStore } from "@/stores/useSelectedPokemon";
 import { motion } from "motion/react";
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import Image from "next/image";
 
 export const SelectedPokemon = () => {
   const { selectedPokemon, setSelectedPokemon } = useSelectedPokemonStore();
+
+  const frontSprites = Object.entries(selectedPokemon?.sprites ?? {})
+    .filter(([key, value]) => key.startsWith("front_") && value)
+    .map(([, value]) => value as string);
 
   return (
     <motion.div
@@ -31,7 +36,22 @@ export const SelectedPokemon = () => {
         </Button>
       </div>
 
-      <div></div>
+      <div className="flex items-center justify-center">
+        <Image
+          src={
+            frontSprites[0]
+              ? frontSprites[0].replaceAll(
+                  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon",
+                  "/api/sprites"
+                )
+              : ""
+          }
+          alt={selectedPokemon?.name ?? ""}
+          width={120}
+          height={120}
+          className="h-50 w-50 border-2 border-gray-200 rounded-md"
+        />
+      </div>
     </motion.div>
   );
 };

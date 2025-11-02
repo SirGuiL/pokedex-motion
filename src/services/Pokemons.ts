@@ -9,17 +9,25 @@ interface getProps {
 
 export class PokemonService {
   async get({ limit, offset, query }: getProps) {
-    const response = await fetch(
-      `/api/pokemons?limit=${limit}&offset=${offset}&query=${query}`
-    );
+    try {
+      const response = await fetch(
+        `/api/pokemons?limit=${limit}&offset=${offset}&query=${query}`
+      );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch pokemons");
+      if (!response.ok) {
+        throw new Error("Failed to fetch pokemons");
+      }
+
+      const parsed = PokemonsResponseSchema.parse(await response.json());
+
+      return parsed;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+
+      throw new Error("internal server error");
     }
-
-    const parsed = PokemonsResponseSchema.parse(await response.json());
-
-    return parsed;
   }
 
   async getById(id: string) {

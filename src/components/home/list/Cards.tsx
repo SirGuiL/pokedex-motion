@@ -22,16 +22,22 @@ const fetchPokemons = async (query: string, offset: number, limit?: number) => {
 
 export const Cards = () => {
   const { search } = useSearchStore();
-  const { setMaxPages, pagination } = usePaginationStore();
+  const { setMaxPages, pagination, setPagination } = usePaginationStore();
 
   const { isLoading, data, error, refetch, isFetching } = useQuery({
     queryKey: ["pokemons", search, pagination],
     queryFn: () => fetchPokemons(search, (pagination - 1) * 12, 12),
+    refetchOnWindowFocus: false,
+    retry: false,
   });
 
   const handleRefetch = useCallback(() => {
     refetch();
-  }, [refetch]);
+
+    if (pagination != 1) {
+      setPagination(1);
+    }
+  }, [refetch, pagination, setPagination]);
 
   useEffect(() => {
     handleRefetch();
@@ -56,7 +62,7 @@ export const Cards = () => {
 
   if (error) {
     return (
-      <div>
+      <div className="flex flex-col gap-4 items-center">
         <div>error</div>
       </div>
     );
