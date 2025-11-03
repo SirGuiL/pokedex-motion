@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { AbilityService } from "@/services/Moves";
+import { useFilterStore } from "@/stores/usePokedexFilters";
 import { useQuery } from "@tanstack/react-query";
 import { Check, ChevronDown } from "lucide-react";
 import { useState } from "react";
@@ -31,8 +32,9 @@ export const AbilityCombobox = () => {
     retry: false,
   });
 
+  const { ability, setAbility } = useFilterStore();
+
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
 
   if (!data) return null;
 
@@ -47,12 +49,12 @@ export const AbilityCombobox = () => {
           aria-expanded={open}
           className={cn(
             "justify-between text-gray-800 hover:text-gray-800 hover:bg-white flex-1",
-            !value && "text-muted-foreground hover:text-muted-foreground"
+            !ability && "text-muted-foreground hover:text-muted-foreground"
           )}
           withoutAnimation
         >
-          {value
-            ? data.results.find((move) => move.name === value)?.name
+          {ability
+            ? data.results.find((move) => move.name === ability)?.name
             : "Select ability..."}
           <ChevronDown className="opacity-50" />
         </Button>
@@ -68,7 +70,7 @@ export const AbilityCombobox = () => {
                   key={move.name}
                   value={move.name}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue);
+                    setAbility(currentValue === ability ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
@@ -76,7 +78,7 @@ export const AbilityCombobox = () => {
                   <Check
                     className={cn(
                       "ml-auto",
-                      value === move.name ? "opacity-100" : "opacity-0"
+                      ability === move.name ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>
